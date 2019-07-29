@@ -1,0 +1,21 @@
+.Tracklist {
+  .card {
+    display: flex;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content {
+    flex: 1 0 auto;
+  }
+
+  .cover {
+    width: 100px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+}
+
