@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import './App.css';
+import './App.scss';
 import { getToken } from './utils'
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';

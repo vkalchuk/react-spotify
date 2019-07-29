@@ -14,7 +14,8 @@ interface Track {
   id: string;
   name: string;
   artists: any[];
-  album: Album
+  album: Album,
+  selected: boolean
 }
 
 interface Album {
@@ -30,20 +31,26 @@ interface AlbumImage {
 @observer
 class Tracklist extends React.Component {
   @observable topTracks: Track[] = []
+  @observable error: string = ''
 
   componentDidMount() {
     Spotify.getTopTracks()
       .then(res => res.json())
       .then(tracksResponse => {
-        console.log('tracks response', tracksResponse.items)
-        this.topTracks = tracksResponse.items.map((i: {track: Track}) => i.track)
-
-        // mock tracks if 0 length
-        if (!tracksResponse.items.length) {
-          tracksResponse.items = mock_data.items
-
+        console.log(tracksResponse)
+        if (!tracksResponse.error) {
+          console.log('tracks response', tracksResponse.items)
           this.topTracks = tracksResponse.items.map((i: {track: Track}) => i.track)
-          console.log('mocked tracks', tracksResponse.items.map((i: {track: Track}) => i.track))
+  
+          // mock tracks if 0 length
+          if (!tracksResponse.items.length) {
+            tracksResponse.items = mock_data.items
+  
+            this.topTracks = tracksResponse.items.slice(0, 3).map((i: {track: Track}) => i.track)
+            console.log('mocked tracks', tracksResponse.items.map((i: {track: Track}) => i.track))
+          }
+        } else {
+          this.error = tracksResponse.error.message
         }
       })
   }
@@ -57,12 +64,18 @@ class Tracklist extends React.Component {
     return track.album.images.slice(-2)[0].url
   }
 
+  handleTrackClick(track: Track) {
+    track.selected = !track.selected
+  }
+
   render () {
     return (
       <div className='Tracklist'>
+        {this.error && <h1>{this.error}</h1>}
+
         {this.topTracks.map(track => {
           return (
-            <Card key={track.id} className='card'>
+            <Card onClick={() => this.handleTrackClick(track)} key={track.id} className={'card' + (track.selected ? ' selected' : '')}>
               <div className='details'>
                 <CardContent className='content'>
                   <Typography component="h5" variant="h5">
