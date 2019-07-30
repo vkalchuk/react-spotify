@@ -18,7 +18,7 @@ class Spotify {
 
   // Comma separated list of Spotify IDs for a seed track.
   // Up to 5 seed values may be provided.
-  static getRecommendationsOnArtists(tracks: string[]): Promise<Response> {
+  static getRecommendationsOnTracks(tracks: string): Promise<Response> {
     return fetch(`${API_URL}/recommendations?seed_tracks=${tracks}`, getAuthHeaders())
   }
 }

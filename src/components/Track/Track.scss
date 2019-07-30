@@ -1,0 +1,32 @@
+.Track {
+  .card {
+    display: flex;
+    margin: 20px;
+    cursor: pointer;
+
+    &:hover {
+      margin: 20px 10px;
+      transition: .2s;
+    }
+
+    &.selected {
+      margin: 20px 10px;
+      box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.5);
+    }
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content {
+    flex: 1 0 auto;
+  }
+
+  .cover {
+    width: 100px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+}

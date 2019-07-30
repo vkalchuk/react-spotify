@@ -4,34 +4,16 @@ import mock_data from '../../mock'
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 import './Tracklist.scss'
+import Button from '@material-ui/core/Button';
+import Track from '../Track'
+import { iTrack } from '../../types/Track'
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-
-interface Track {
-  id: string;
-  name: string;
-  artists: any[];
-  album: Album,
-  selected: boolean
-}
-
-interface Album {
-  images: AlbumImage[]
-}
-
-interface AlbumImage {
-  height: number,
-  url: string,
-  width: number
-}
 
 @observer
 class Tracklist extends React.Component {
-  @observable topTracks: Track[] = []
+  @observable topTracks: iTrack[] = []
   @observable error: string = ''
+  @observable recommendedTracks: iTrack[] = []
 
   componentDidMount() {
     Spotify.getTopTracks()
@@ -40,14 +22,14 @@ class Tracklist extends React.Component {
         console.log(tracksResponse)
         if (!tracksResponse.error) {
           console.log('tracks response', tracksResponse.items)
-          this.topTracks = tracksResponse.items.map((i: {track: Track}) => i.track)
+          this.topTracks = tracksResponse.items.map((i: {track: iTrack}) => i.track)
   
           // mock tracks if 0 length
           if (!tracksResponse.items.length) {
             tracksResponse.items = mock_data.items
   
-            this.topTracks = tracksResponse.items.slice(0, 3).map((i: {track: Track}) => i.track)
-            console.log('mocked tracks', tracksResponse.items.map((i: {track: Track}) => i.track))
+            this.topTracks = tracksResponse.items.slice(0, 3).map((i: {track: iTrack}) => i.track)
+            console.log('mocked tracks', tracksResponse.items.map((i: {track: iTrack}) => i.track))
           }
         } else {
           this.error = tracksResponse.error.message
@@ -55,17 +37,26 @@ class Tracklist extends React.Component {
       })
   }
 
-  getArtist(track: Track): string {
-    return track.artists[0].name
-  }
-
-  getAlbumImage(track: Track):string {
-    // get pre last image from album (moderate quality)
-    return track.album.images.slice(-2)[0].url
-  }
-
-  handleTrackClick(track: Track) {
+  handleTrackClick(track: iTrack) {
     track.selected = !track.selected
+  }
+
+  shouldShowRecommendationsButton(): boolean {
+    return this.topTracks.some(track => track.selected)
+  }
+
+  getRecommendations() {
+    const selectedIDs = this.topTracks.filter(track => track.selected).map(selectedTrack => selectedTrack.id).join(',')
+    console.log(selectedIDs)
+
+    Spotify.getRecommendationsOnTracks(selectedIDs)
+      .then(res => res.json())
+      .then(data => {
+        if (data.tracks) {
+          this.recommendedTracks = data.tracks
+          console.log('getRecommendationsOnTracks', data)
+        }
+      })
   }
 
   render () {
@@ -73,27 +64,27 @@ class Tracklist extends React.Component {
       <div className='Tracklist'>
         {this.error && <h1>{this.error}</h1>}
 
-        {this.topTracks.map(track => {
-          return (
-            <Card onClick={() => this.handleTrackClick(track)} key={track.id} className={'card' + (track.selected ? ' selected' : '')}>
-              <div className='details'>
-                <CardContent className='content'>
-                  <Typography component="h5" variant="h5">
-                    {track.name}
-                  </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    {this.getArtist(track)}
-                  </Typography>
-                </CardContent>
-              </div>
-              <CardMedia
-                className='cover'
-                image={track.album.images.slice(-2)[0].url}
-                title="Live from space album cover"
-              />
-            </Card>
-          )
-        })}
+        {
+          this.topTracks.length &&
+          <>
+            <h1>Your top tracks!</h1>
+            {this.topTracks.map(track => <Track key={track.id} onTrackClick={this.handleTrackClick} isSelected={track.selected} track={track} />)}
+          </>
+        }
+
+        {this.shouldShowRecommendationsButton() && <Button onClick={() => this.getRecommendations()} variant="contained" color="primary">
+          Get Recommendations
+        </Button>}
+
+        {
+          this.recommendedTracks.length ?
+          <>
+            <h1>Recommended listening</h1>
+            {this.recommendedTracks.map(track => <Track key={track.id} track={track} />)}
+          </> :
+          null
+        }
+        
       </div>
     );
   }
