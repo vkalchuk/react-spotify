@@ -1,3 +1,5 @@
+@import '../../queries';
+
 .Tracklist {
   width: 80%;
 
@@ -7,6 +9,10 @@
   align-items: center;
   align-self: center;
 
+  @include mobile {
+    width: 95%;
+  }
+
   .card {
     display: flex;
     width: 80%;
@@ -14,13 +20,37 @@
     cursor: pointer;
     transition: 0.3s;
 
+    @include large-screen {
+      width: 60%;
+    }
+
+    @include mobile {
+      width: 97%;
+    }
+
     &:hover {
       width: 82%;
+
+      @include large-screen {
+        width: 62%;
+      }
+
+      @include mobile {
+        width: 97%;
+      }
     }
 
     &.selected {
       width: 83%;
       box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.5);
+
+      @include large-screen {
+        width: 63%;
+      }
+
+      @include mobile {
+        width: 99%;
+      }
     }
 
     &.recommended {
@@ -28,6 +58,14 @@
 
       &:hover {
         width: 80%;
+
+        @include large-screen {
+          width: 60%;
+        }
+
+        @include mobile {
+          width: 97%;
+        }
       }
     }
   }
@@ -50,6 +88,7 @@
 
   .recommended-btn {
     background-color: #1db954;
+    margin: 10px 0;
 
     &:hover {
       background-color: #1ed760;
