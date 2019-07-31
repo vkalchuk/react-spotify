@@ -1,5 +1,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+- User is able to login via Spotify.
+- Top tracks fetched after login.
+- Recommendations can be shown based on selected tracks.
+
+[Demo](https://keaws.github.io/react-spotify/)
+
 ## Available Scripts
 
 In the project directory, you can run:
