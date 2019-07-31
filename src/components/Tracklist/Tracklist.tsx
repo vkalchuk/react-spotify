@@ -65,14 +65,15 @@ class Tracklist extends React.Component {
         {this.error && <h1>{this.error}</h1>}
 
         {
-          this.topTracks.length &&
+          this.topTracks.length ?
           <>
             <h1>Your top tracks!</h1>
             {this.topTracks.map(track => <Track key={track.id} onTrackClick={this.handleTrackClick} isSelected={track.selected} track={track} />)}
-          </>
+          </> :
+          null
         }
 
-        {this.shouldShowRecommendationsButton() && <Button onClick={() => this.getRecommendations()} variant="contained" color="primary">
+        {this.shouldShowRecommendationsButton() && <Button className='recommended-btn' onClick={() => this.getRecommendations()} variant="contained" color="primary">
           Get Recommendations
         </Button>}
 
@@ -80,7 +81,7 @@ class Tracklist extends React.Component {
           this.recommendedTracks.length ?
           <>
             <h1>Recommended listening</h1>
-            {this.recommendedTracks.map(track => <Track key={track.id} track={track} />)}
+            {this.recommendedTracks.map(track => <Track className='recommended' key={track.id} track={track} />)}
           </> :
           null
         }

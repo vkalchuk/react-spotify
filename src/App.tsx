@@ -29,9 +29,11 @@ class App extends React.Component {
   render () {
     return (
       <div className="App">
-        {!this.token && <Button onClick={this.login} variant="contained" color="primary">
-          Login
-        </Button>}
+        {!this.token && <div className='login-container'>
+          <Button onClick={this.login} className='login-btn' variant="contained" color="primary">
+            Login with Spotify
+          </Button>
+        </div>}
 
         {this.token && <Tracklist />}
         

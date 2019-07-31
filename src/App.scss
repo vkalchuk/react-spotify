@@ -1,4 +1,22 @@
 .App {
+  height: 100%;
   display: flex;
-  justify-content: center;
+  flex-flow: column nowrap;
+
+  .login-container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 auto;
+  }
+
+  .login-btn {
+    width: 50%;
+    background-color: #1db954;
+
+    &:hover {
+      background-color: #1ed760;
+    }
+  }
 }

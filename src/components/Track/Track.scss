@@ -1,17 +1,26 @@
 .Track {
   .card {
     display: flex;
+    width: 80%;
     margin: 20px;
     cursor: pointer;
+    transition: 0.3s;
 
     &:hover {
-      margin: 20px 10px;
-      transition: .2s;
+      width: 82%;
     }
 
     &.selected {
-      margin: 20px 10px;
+      width: 83%;
       box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.5);
+    }
+
+    &.recommended {
+      cursor: default;
+
+      &:hover {
+        width: 80%;
+      }
     }
   }
 
@@ -22,6 +31,7 @@
 
   .content {
     flex: 1 0 auto;
+    padding-right: 40px;
   }
 
   .cover {

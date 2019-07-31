@@ -8,7 +8,8 @@ import { iTrack } from '../../types/Track'
 type TrackProps = {
   track: iTrack,
   onTrackClick?: (track: iTrack) => void,
-  isSelected?: boolean
+  isSelected?: boolean,
+  className?: string
 }
 
 export default class Track extends Component<TrackProps, {}> {
@@ -23,13 +24,14 @@ export default class Track extends Component<TrackProps, {}> {
   }
 
   render() {
-    const { track, onTrackClick, isSelected } = this.props
+    const { track, onTrackClick, isSelected, className } = this.props
 
     return (
-      <Card onClick={onTrackClick && (() => onTrackClick(track))} key={track.id} className={'Track card' + (isSelected ? ' selected' : '')}>
+      <Card onClick={onTrackClick && (() => onTrackClick(track))} key={track.id}
+        className={`Track card ${className ? className : ''} ${isSelected ? 'selected' : ''}`}>
         <div className='details'>
           <CardContent className='content'>
-            <Typography component="h5" variant="h5">
+            <Typography className='track-name' component="h5" variant="h5">
               {track.name}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
