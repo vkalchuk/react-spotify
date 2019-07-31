@@ -1,0 +1,14 @@
+$mobile-width: 550px;
+$large-screen-width: 1400px;
+
+@mixin large-screen {
+  @media (min-width: #{$large-screen-width}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: #{$mobile-width}) {
+    @content;
+  }
+}
