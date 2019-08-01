@@ -22,14 +22,15 @@ class Tracklist extends React.Component {
         console.log(tracksResponse)
         if (!tracksResponse.error) {
           console.log('tracks response', tracksResponse.items)
-          this.topTracks = tracksResponse.items.map((i: {track: iTrack}) => i.track)
-  
+          // get top 5 tracks
+          this.topTracks = tracksResponse.items.slice(0, 5)
+
           // mock tracks if 0 length
           if (!tracksResponse.items.length) {
-            tracksResponse.items = mock_data.items
-  
-            this.topTracks = tracksResponse.items.slice(0, 3).map((i: {track: iTrack}) => i.track)
-            console.log('mocked tracks', tracksResponse.items.map((i: {track: iTrack}) => i.track))
+            tracksResponse.items = mock_data.items.slice(0, 5)
+
+            this.topTracks = tracksResponse.items
+            console.log('mocked tracks', tracksResponse.items.slice(0, 5))
           }
         } else {
           this.error = tracksResponse.error.message
@@ -68,12 +69,24 @@ class Tracklist extends React.Component {
           this.topTracks.length ?
           <>
             <h1>Your top tracks!</h1>
-            {this.topTracks.map(track => <Track key={track.id} onTrackClick={this.handleTrackClick} isSelected={track.selected} track={track} />)}
+            <div className="top-tracks-container">
+              {this.topTracks.map(track => <Track
+                  key={track.id}
+                  onTrackClick={this.handleTrackClick}
+                  isSelected={track.selected}
+                  track={track}
+              />)}
+            </div>
           </> :
           null
         }
 
-        {this.shouldShowRecommendationsButton() && <Button className='recommended-btn' onClick={() => this.getRecommendations()} variant="contained" color="primary">
+        {this.shouldShowRecommendationsButton() && <Button
+            className='recommended-btn'
+            onClick={() => this.getRecommendations()}
+            variant="contained"
+            color="primary"
+        >
           Get Recommendations
         </Button>}
 
@@ -81,11 +94,14 @@ class Tracklist extends React.Component {
           this.recommendedTracks.length ?
           <>
             <h1>Recommended listening</h1>
-            {this.recommendedTracks.map(track => <Track className='recommended' key={track.id} track={track} />)}
+            {this.recommendedTracks.map(track => <Track
+                className='recommended'
+                key={track.id}
+                track={track} />)}
           </> :
           null
         }
-        
+
       </div>
     );
   }
